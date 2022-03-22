@@ -1,5 +1,5 @@
-import './App.css';
-import Die from './components/Die';
+import './App.css'
+import Die from './components/Die'
 import React from 'react'
 import {nanoid} from 'nanoid'
 
@@ -19,16 +19,25 @@ function App() {
   }
 
   function rollDice(){
-    setDice(allNewDice())
+    setDice(prevDice => prevDice.map(die => {
+      if(die.isHeld){
+        return die
+      } else {
+        return {
+          value: Math.floor( 1 + Math.random() * (6 + 1 - 1)),
+          isHeld: false,
+          id: nanoid()
+        }
+      }
+    }))
   }
-
+ 
   function holdDice(id){
     setDice(prevDice => prevDice.map(die => {
       return id === die.id ? {...die, isHeld: !die.isHeld} : die
     }))
   }
   
- 
   const die = dice.map(dieElement => 
     <Die 
       key={dieElement.id}
@@ -44,7 +53,7 @@ function App() {
         </div>
         <button className='main__button' onClick={rollDice}>Roll</button>
     </main>
-  );
+  )
 }
 
-export default App;
+export default App
